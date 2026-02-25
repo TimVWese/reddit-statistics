@@ -1,0 +1,93 @@
+\newcommand{\annotationsize}{\small}
+\begin{tikzpicture}
+  %% DIAGRAM
+
+  \begin{scope}[shift={(0pt,0)}]
+    % Subfigure
+    % Nodes
+    \node at (0,0) (U) {\( u_i[t] \)};
+    \node at (3.4,0) (Ut) {\( u_i[t+1] \)};
+    \node at (0, 2.4) (E) {\( e_i[t] \)};
+    \node at (-2, 1.2) (P) {\only<1>{\color{color1}}\( e_j[t] \)};
+    \node at (1.8, 1.2) (R1) {\only<1>{\color{color2}}\( e_{1} \)};
+    \node at (3, 1.2) (RK) {\only<1>{\color{color2}}\( e_{k} \)};
+
+    % Edges
+    \only<1>{\draw[->] (U) -- (E);}
+    \only<2>{\draw[->, color1, line width=1.2pt] (U) -- (E);}
+    \only<1>{\draw[->] (P) -- (E);}
+    \only<2>{\draw[->, color1, line width=1.2pt] (P) -- (E);}
+    \draw[->] (P) -- (U);
+    \draw[->] (E) -- (R1);
+    \draw[->] (E) -- (RK);
+    \only<1>{\draw[->] (R1) -- (Ut);}
+    \only<2>{\draw[->, color2, line width=1.2pt] (R1) -- (Ut);}
+    \only<1>{\draw[->] (RK) -- (Ut)};
+    \only<2>{\draw[->, color2, line width=1.2pt] (RK) -- (Ut);}
+    \only<1>{\draw[->] (U) -- (Ut);}
+    \only<2>{\draw[->, color2, line width=1.2pt] (U) -- (Ut);}
+
+    % Annotations
+    \node at (0, -.4) {\annotationsize Internal};
+    \node at (0, 2.8) {\annotationsize Expressed};
+    %\node at (-1.9, 2.2) {\annotationsize Focal user};
+
+    \node at (2.4, 1.2) {\only<1>{\color{color2}}\( \cdots \)};
+    \node[align=center] at (3, 2.2) {\annotationsize \only<1>{\color{color2}} Replied sentiments \\ \only<1>{\color{color2}} \( I_i[t, t+1] \)};
+    \node[align=center] at (-2, 2.05) {\annotationsize \only<1>{\color{color1}} Parent \\ \only<1>{\color{color1}}sentiment};
+    \node[align=center] at (-0.85, 1.6) {\annotationsize \( \only<2>{\color{color1}} \alpha_{e,i} \) };
+    \node[align=center] at (2.85, 0.72) {\annotationsize \( \only<2>{\color{color2}} \alpha_{u,i} \)};
+  \end{scope}
+  %% Reddit thread
+  \only<1>{\node at (13.5,1.5) {%
+    \begin{minipage}[t]{\textwidth}
+      \dirtree{%
+        .1 \color{color1} Parent expression.
+          .2 Focal expression.
+            .3 \color{color2} Reply expression.
+            .3 \color{color2} Reply expression.
+              .4 \color{color2bw} Irrelevant expression.
+      }
+    \end{minipage}
+  };}
+  %% 1D KERNEL
+  \only<2->{\begin{axis}[
+    xshift=205pt,
+    yshift=0pt,
+    width=.333\textwidth,
+    height=.3\textwidth,
+    axis lines*=left,
+    %
+    xmin=-1,
+    xmax=1,
+    xlabel=\( s_2 - s_1 \),
+    xtick={-1, -0.33, 0, 0.33, 1},
+    xticklabels={-1, -\( \epsilon \), 0, \( \epsilon \), 1},
+    %
+    ymin=-.4,
+    ymax=.4,
+    ylabel=\( B_{\alpha, \epsilon} \),
+    ylabel style={%
+      at={(axis description cs:-0.05,1.15)},
+      anchor=north,
+      rotate=-90,
+    },
+    ytick={-0.3, 0, 0.3},
+    yticklabels={\( s_1 -\alpha\cdot\epsilon \), \( s_1 \), \( s_1 + \alpha\cdot\epsilon \)},
+    %
+  ]
+    \addplot[
+      mark=none,
+      line width=2pt,
+      color=color2,
+    ]
+    table[x=x, y=y2, col sep=comma]{figures/siebc/kernel1d.csv};
+
+    \addplot[
+      mark=none,
+      line width=2pt,
+      color=color1,
+    ]
+    table[x=x, y=y1, col sep=comma]{figures/siebc/kernel1d.csv};
+  \end{axis}}
+\end{tikzpicture}

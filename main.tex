@@ -1,0 +1,237 @@
+% Aspectratio 16:9 should be used
+% The theme is not suited for 4:3 aspectratio
+\documentclass[aspectratio=169]{beamer}
+% Load the UGent theme
+\usetheme[language=en,faculty=bw,usecolors]{ugent}
+\usepackage[ugent]{timscolours}
+\usepackage{svg}
+%\usepackage{pgfplots} % Loaded in shared/header.tex
+\usepackage{graphicx} % Required for inserting images
+\input{shared/header}
+\input{figures/figures}
+
+%\input{figures/results/figures}
+%\usepgfplotslibrary{external}
+%\tikzexternalize[prefix=figures/externalize/]
+% Metadata of the presentation
+\title{Coevolution of opinions and epidemics on networks.}
+\date{26th February 2026}% \\ Tim Van Wesemael}
+\author[TVW]{Tim Van Wesemael}
+
+% Have this if you'd like section slides
+\AtBeginSection[]{%
+    \sectionframe%
+}
+
+\newcommand{\backupbegin}{%
+	\newcounter{framenumberappendix}
+	\setcounter{framenumberappendix}{\value{framenumber}}
+}
+\newcommand{\backupend}{%
+	\addtocounter{framenumberappendix}{-\value{framenumber}}
+	\addtocounter{framenumber}{\value{framenumberappendix}}
+}
+
+\newcommand{\graphwidth}{0.8\textwidth}
+\newcommand{\graphlabelsize}{\small}
+\newcommand{\ylabelshift}{-2pt}
+
+\newcommand{\twocolumns}[3][.5]{%
+  \begin{columns}
+    \begin{column}{#1\textwidth}
+      #2
+    \end{column}
+    \begin{column}{\dimexpr(\textwidth - #1\textwidth)\relax}
+      #3
+    \end{column}
+  \end{columns}
+}
+
+\begin{document}
+
+% Have this if you'd like the presentation to start
+% with a large UGent logo
+%\logoframe
+
+% I guess you always want a titleframe
+\titleframe
+
+%\section{}
+
+\begin{frame}{Complex contagion}
+	\begin{columns}
+		\begin{column}{0.5\textwidth}
+			\begin{itemize}
+				\item Opinion dynamics
+				\item Many models
+				\item Watts threshold: adopt if fraction of neighbours exceeds threshold
+			\end{itemize}
+		\end{column}
+		\begin{column}{0.5\textwidth}
+			\centering
+			\includegraphics[width=0.9\textwidth]{figures/pics/watts}
+		\end{column}
+	\end{columns}
+\end{frame}
+
+\begin{frame}{Data-driven approaches}
+	\begin{columns}
+		\begin{column}{0.45\textwidth}
+			\centering
+			\includegraphics[width=0.15\textheight]{figures/pics/reddit}\\ \vspace{10pt}
+			\includegraphics[width=0.75\textwidth]{figures/pics/reddit_ss}
+		\end{column}
+		\begin{column}{0.1\textwidth}
+			\centering
+			\vfill
+			\scalebox{2}{%
+				\( {\color{ugentblue}\rightarrow} \)
+			}
+			\vfill
+		\end{column}
+		\begin{column}{0.45\textwidth}
+			% \centering
+			% \hspace*{-40pt}\input{figures/networks/opinion_network}
+			% \begin{itemize}
+			% 	\item \textcolor{ugentyellow}{Structure}
+			% 		\begin{itemize}
+			% 			\item Centrality measures
+			% 			\item Graph balancing
+			% 		\end{itemize}
+			% 	\item \textcolor{ugentblue}{Dynamics}
+			% 	\begin{itemize}
+			% 		\item Time-series analysis
+			% 		\item Causal inference
+			% 		\item Signals via NLP
+			% 	\end{itemize}
+			% \end{itemize}
+		\end{column}
+	\end{columns}
+\end{frame}
+
+% \begin{frame}{Goals}
+% 	\begin{columns}
+% 		\begin{column}{0.4\textwidth}
+% 			\begin{itemize}
+% 				\item {\only<1>{\color{ugentblue}}Empirical sources for contact reduction}
+% 				\item {\only<2>{\color{ugentblue}}Data-driven models for social dynamics}
+% 				\item {\only<3>{\color{ugentblue}}Identification of conversation polarization}
+% 			\end{itemize}
+% 		\end{column}
+% 		\begin{column}{0.6\textwidth}
+% 			\centering
+% 			\only<1>{\includegraphics[width=.8\textwidth]{figures/reddit/lockdown}}
+% 			\only<2>{\includegraphics[width=.6\textwidth]{figures/reddit/sentiment}}
+% 			\only<3>{\includegraphics[width=.8\textwidth]{figures/reddit/network}}
+% 		\end{column}
+% 	\end{columns}
+% \end{frame}
+
+\begin{frame}[fragile]
+  \vspace{10pt}
+  % \only<1>{\begin{tikzpicture}
+  %   \focusedlockdown
+  %   \unfocusedmask
+  %   \unfocusedvaccin
+  % \end{tikzpicture}}
+  % \only<2>{\begin{tikzpicture}
+  %   \unfocusedlockdown
+  %   \focusedmask
+  %   \unfocusedvaccin
+  % \end{tikzpicture}}
+  % \only<3->{\begin{tikzpicture}
+  %   \unfocusedlockdown
+  %   \unfocusedmask
+  %   \focusedvaccin
+  % \end{tikzpicture}}
+	% \only<4>{
+	% 	\vspace{-240pt}
+	% 	\begin{center}
+	% 		\begin{tikzpicture}
+	% 			\node[] {%
+	% 				\includegraphics[width=.8\textwidth]{figures/pics/vaccine}
+	% 			};
+	% 		\end{tikzpicture}
+	% 	\end{center}
+	% }
+	\focusedlockdown
+	\focusedmask
+	\focusedvaccin
+\end{frame}
+
+\begin{frame}[fragile]{Sentiment interactions: vaccination}
+  \twocolumns{%
+    \begin{tikzpicture}
+      \sentheatmap{vaccin}
+    \end{tikzpicture}
+		\begin{itemize}
+			\item \alert<1>{Homophily!}
+			\item Replies have similar levels as parent
+		\end{itemize}
+  }{%
+    \begin{tikzpicture}
+      \only<2-3>{\vertextree}
+      \only<2>{\structurededges}
+      \only<3>{\randomedges}
+      \only<4>{\diffheatmap{vaccin}}
+    \end{tikzpicture}
+		\begin{itemize}
+			\item<2-> Expected if everyone is negative
+			\item<3-> Compare to random realisation
+			\item<4-> \alert{Homophily confirmed}
+		\end{itemize}
+  }
+\end{frame}
+
+\begin{frame}[fragile]{SIEBC Model}
+	\twocolumns[.3]{%
+		\begin{itemize}
+			\item \textbf{S}mooth
+			\item \textbf{I}nternal-\textbf{E}xpressed
+			\item \textbf{B}ounded \textbf{C}onfidence
+		\end{itemize}
+	}{%
+		\begin{align*}
+			e_i[t] & \sim B_{{\only<2>{\color{color1}}\alpha_{e,i}}, \epsilon_i}(u_i[t-1], {\only<1>{\color{color1}} e_j[t]})\\
+			u_i[t] & \sim {\only<1>{\color{color2}}\bigotimes_{e_{k}\in I_i[t-1]}} B_{{\only<2>{\color{color2}}\alpha_{u,i}}, \epsilon_i}(u_i[t-1], {\only<1>{\color{color2}} e_{k}})
+		\end{align*}
+	}
+	\vspace{24pt}
+	\input{figures/model_diagram}
+\end{frame}
+
+\newcommand{\topiccol}[2]{%
+	\begin{column}{.33\textwidth}
+		\begin{tikzpicture}
+			#1
+		\end{tikzpicture}
+		\begin{itemize}
+			\item #2
+		\end{itemize}
+	\end{column}
+}
+
+\begin{frame}[fragile]{Reconstruction of sentiment distributions}
+	\begin{columns}
+		\topiccol{\modelsentiment{lockdown}{}}{Lockdowns}
+		\topiccol{\modelsentiment{mask}{}}{Masks}
+		\topiccol{\modelsentiment{vaccin}{\addmodellegend}}{Vaccination}
+	\end{columns}
+	\begin{itemize}
+		\item Okay attempt at predicting difficult distributions
+		\item Homophily present in predicted sentiments as well
+	\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Expressed sentiment update is strongest}
+	\begin{columns}
+		\topiccol{\modelalphas[]{lockdown}{0.41037}{0.88267}{}}{Lockdowns}
+		\topiccol{\modelalphas[]{mask}{0.41230}{0.66326}{}}{Masks}
+		\topiccol{\modelalphas[]{vaccin}{0.41677}{0.51952}{\alphaslegend}}{Vaccination}
+	\end{columns}
+	\begin{itemize}
+		\item Expressed sentiment might diverge from actual sentiment
+	\end{itemize}
+\end{frame}
+
+\end{document}

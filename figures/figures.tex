@@ -1,0 +1,516 @@
+\usepgfplotslibrary{dateplot}
+\usepgfplotslibrary{statistics}
+\pgfplotsset{compat=1.18}
+\usetikzlibrary{pgfplots.colorbrewer}
+\usepgfplotslibrary{fillbetween}
+
+\usepackage{dirtree}
+\renewcommand*\DTstylecomment{\small\textit}
+\renewcommand*\DTstyle{\small}
+
+
+\newcommand{\ymin}{0}
+\newcommand{\ymax}{330}
+
+\colorlet{color1}{ugentblue}
+\colorlet{color2}{ugent-bw}
+\colorlet{negcolor}{ugent-ge}
+
+\colorlet{color1bw}{black!60}
+\colorlet{color2bw}{black!30}
+\colorlet{negcolorbw}{black!40}
+
+
+\pgfplotsset{%
+  colormap={divgrad}{%
+    rgb(0.00000000)=(0.81882353,0.33176471,0.39882353)
+    rgb(0.50000000)=(1.00000000,1.00000000,1.00000000)
+    rgb(1.00000000)=(0.10588235,0.35294118,0.70588235)
+  },
+  colormap={linear}{%
+    rgb(0.00000000)=(1.00000000,1.00000000,1.00000000)
+    rgb(1.00000000)=(0.10588235,0.35294118,0.70588235)
+  },
+}
+
+\usetikzlibrary{external}
+%\tikzexternalize[prefix=figures/]
+
+\pgfplotsset{%
+  timeseries/.style={%
+    width=.95\textwidth,
+    height=100pt,
+    %
+    date coordinates in = x,
+    xmin=2019-12-01,
+    xmax=2022-06-30,
+    xtick={2020-01-01,2020-07-01,2021-01-01,2021-07-01,2022-01-01},
+    xticklabels={},
+    %
+    ymin=\ymin,
+    ylabel style={align=center},
+    yticklabel style={%
+      text width=20pt,
+      align=right
+    },
+    %
+    axis lines*=left,
+    x axis line style={white},
+    x tick style={lightgray},
+    xmajorgrids=true,
+    grid style={lightgray},
+  },
+  %
+  commentseries/.style={%
+    timeseries,
+    ymax=\ymax,
+    ytick={0,100,200,300},
+  },
+  %
+  tsdates/.style={%
+    xticklabels={2020-01-01,2020-07-01,2021-01-01,2021-07-01,2022-01-01,2022-07-01},
+    xticklabel=\year-\month,
+  },
+  %
+  tsline/.style={%
+    mark=none,
+    line width=1pt,
+  },
+}
+
+\newcommand{\negativeday}[2][negcolor]{%
+  \addplot[line width=1pt, color=#1] coordinates {(#2, \ymin) (#2, \ymax)};
+}
+
+\newcommand{\addperiod}[4][color2]{%
+  \fill[#1, opacity=0.3] (axis cs: #3,\ymin) rectangle (axis cs: #4,\pgfkeysvalueof{/pgfplots/ymax});
+  \node[anchor=north west, rotate=-90] at (axis cs: #3, \pgfkeysvalueof{/pgfplots/ymax}) {\scriptsize #2};
+}
+
+\newcommand{\addtrend}[2][color1]{%
+  \addplot[tsline, color=#1, dashed] table[x=date, y=vals, col sep=comma]{input/timeseries/belgium_#2_trend.csv};
+}
+
+\newcommand{\addevent}[6][color2]{%
+  \addplot[tsline, #1] coordinates {(#3, #4) (#5, #2)};
+    \node[anchor=south,align=center,text=color2,font=\scriptsize] at (axis cs: #5, #2) {#6};
+}
+
+\newcommand{\timeseries}[5][]{%
+    \begin{axis}[
+        commentseries,
+        ylabel={\color{#4}#3},
+        #1,
+      ]
+      #5;
+      %\addtrend{#2}
+      \addplot[tsline, color=#4] table[x=date, y=nb_posts, col sep=comma]{figures/timeseries/belgium_#2.csv};
+    \end{axis}
+}
+
+\newcommand{\focusedlockdown}{%
+  \timeseries[tsdates]{lockdown}{Lockdowns}{color1}{%
+    \addperiod[color2]{}{2020-03-13}{2020-06-08}
+    \addperiod[color2]{}{2020-07-29}{2020-08-26}
+    \addperiod[color2]{}{2020-10-19}{2021-06-09}
+    \addperiod[color2]{}{2021-11-27}{2022-02-18}
+    \negativeday[negcolor]{2020-03-14}
+    \negativeday[negcolor]{2021-01-21}
+    \negativeday[negcolor]{2022-05-25}
+  }
+}
+
+\newcommand{\unfocusedlockdown}{%
+  \timeseries{lockdown}{Lockdowns}{color1bw}{%
+    \negativeday[negcolorbw]{2020-03-14}
+    \negativeday[negcolorbw]{2021-01-21}
+    \negativeday[negcolorbw]{2022-05-25}
+  }
+}
+
+\newcommand{\focusedmask}{%
+  \timeseries[yshift=-80pt, tsdates]{mask}{Masks}{color1}{%
+    \negativeday[negcolor]{2020-07-09}
+    \negativeday[negcolor]{2020-10-27}
+    \negativeday[negcolor]{2020-11-21}
+    \negativeday[negcolor]{2021-04-18}
+    \negativeday[negcolor]{2022-01-15}
+    \addevent{200}{2020-07-09}{130}{2020-05-27}{General \\ mandate}
+    \addevent{150}{2021-09-17}{60}{2021-06-15}{End in \\ Flanders}
+    \addevent{200}{2021-11-17}{110}{2021-10-01}{Broad \\ reintroduction}
+  }
+}
+
+\newcommand{\unfocusedmask}{%
+  \timeseries[yshift=-80pt]{mask}{Masks}{color1bw}{%
+    \negativeday[negcolorbw]{2020-07-09}
+    \negativeday[negcolorbw]{2020-10-27}
+    \negativeday[negcolorbw]{2020-11-21}
+    \negativeday[negcolorbw]{2021-04-18}
+    \negativeday[negcolorbw]{2022-01-15}
+  }
+}
+
+\newcommand{\focusedvaccin}{%
+  \timeseries[yshift=-160pt, tsdates]{vaccin}{Vaccination}{color1}{%
+      \addevent{200}{2020-12-28}{130}{2020-11-16}{Start campaign}
+      \addevent{200}{2021-11-01}{140}{2021-09-16}{Healthcare \\ obligation}
+      \negativeday[negcolor]{2020-09-03}
+    }
+}
+
+\newcommand{\unfocusedvaccin}{%
+  \timeseries[yshift=-160pt]{vaccin}{Vaccination}{color1bw}{%
+      \negativeday[negcolorbw]{2020-09-03}
+    }
+}
+
+
+%% HEATMAPS!
+
+\pgfplotsset{%
+  heatmap/.style={%
+    width=.75\textwidth,
+    height=.75\textwidth,
+    point meta=explicit,
+    %
+    xmin=-1.025,
+    xmax=1.025,
+    xlabel={Sentiment of comment},
+    xtick={-1.0, 0.0, 1.0},
+    %
+    ymin=-1.025,
+    ymax=1.025,
+    ylabel={Sentiment of parent},
+    ylabel style={%
+      yshift=-7pt
+    },
+    ytick={-1.0, 0.0, 1.0},
+    %
+    colorbar,
+  },
+  %
+  sentheatmap/.style={%
+    heatmap,
+    colormap name={linear},
+    point meta min=0.0,
+    point meta max=2.5,
+    colorbar style={%
+      samples=3,
+      scaled y ticks=false,
+      ytick={0, 2.2},
+      yticklabels={None, Many},
+    },
+  },
+  %
+  diffheatmap/.style={%
+    heatmap,
+    colormap name={divgrad},
+    point meta min=-1.15,
+    point meta max=1.15,
+    colorbar style={%
+      samples=3,
+      scaled y ticks=false,
+      ytick={{-1, 0, 1}},
+      yticklabels={{Less, Expected, More}},
+    },
+  },
+  %
+  plotheatmap/.style={%
+    matrix plot*,
+    mesh/cols=41,
+    point meta=explicit,
+  }
+}
+
+\newcommand{\sentheatmap}[2][]{%
+  \begin{axis}[sentheatmap,#1]
+    \addplot [plotheatmap] table [x=x, y=y, meta=z, col sep=comma] {figures/sentiment/belgium_#2_bert_sent.csv};
+  \end{axis}
+}
+
+\newcommand{\diffheatmap}[2][]{%
+  \begin{axis}[diffheatmap,#1]
+    \addplot [plotheatmap] table [x=x, y=y, meta=z, col sep=comma] {figures/sentiment/belgium_#2_bert_diff.csv};
+  \end{axis}
+}
+
+%% Ze network
+
+
+\newcommand{\vertextree}{%
+  \SetVertexStyle[LineWidth=0pt]
+  \Vertex[x=0,y=0,color=negcolor,]{T}
+
+  \Vertex[x=-1.5,y=-1.25,color=negcolor,]{S1}
+  \Vertex[x=0,y=-1.25,color=negcolor,]{S2}
+  \Vertex[x=1.5,y=-1.25,color=color2,]{S3}
+
+  \Vertex[x=-2.25,y=-2.5,color=negcolor,]{T1}
+  \Vertex[x=-.75,y=-2.5,color=negcolor,]{T2}
+  \Vertex[x=0.75,y=-2.5,color=color2,]{T3}
+  \Vertex[x=2.25,y=-2.5,color=negcolor,]{T4}
+
+  \Vertex[x=-.75,y=-3.75,color=negcolor,]{F5}
+}
+
+\newcommand{\structurededges}{%
+  \Edge[Direct](S1)(T)
+  \Edge[Direct](S2)(T)
+  \Edge[Direct](S3)(T)
+
+  \Edge[Direct](T1)(S2)
+  \Edge[Direct](T2)(S2)
+  \Edge[Direct](T3)(S3)
+  \Edge[Direct](T4)(S3)
+
+  \Edge[Direct](F5)(T2)
+}
+
+\newcommand{\randomedges}{%
+  \Edge[Direct](S1)(S2)
+  \Edge[Direct](S2)(T1)
+  \Edge[Direct](S3)(S2)
+
+  \Edge[Direct](T1)(T2)
+  \Edge[Direct](T2)(S1)
+  \Edge[Direct](T3)(T)
+  \Edge[Direct](T4)(T)
+
+  \Edge[Direct](F5)(T2)
+}
+
+%% Homophily curve
+\pgfplotsset{%
+  homo/.style={%
+    width = .9\textwidth,
+    height = .75\textwidth,
+    %
+    xmin=1,
+    xmax=5,
+    xlabel={context size \( n \)},
+    %
+    ymin=0,
+    ymax=0.28,
+    scaled y ticks=false,
+    ytick={0,.1,.2},
+    yticklabels={},
+    %
+    legend style={%
+      at={(0.95,0.95)},
+      anchor=north east,
+    },
+    reverse legend,
+  },
+  %
+  homoylabels/.style={%
+    ylabel={homophily},
+    yticklabels={0,0.1,0.2},
+  },
+  %
+  homoline/.style={%
+    mark=none,
+    line width=2pt,
+  },
+  %
+}
+
+\newcommand{\addhomolegend}{%
+  \legend{\( U^n \), \( A^n \)};
+}
+
+\newcommand{\sentimenthomophily}[4][]{%
+  \begin{axis}[homo, #1]
+    \addplot[
+      homoline, color1, mark=*,
+      restrict x to domain=1:#3,
+    ] table[x=x, y=gen, col sep=comma]{figures/sentiment/belgium_#2_bert_context.csv};
+    \addplot[
+      homoline, color2, mark=*,
+      restrict x to domain=1:#4,
+    ] table[x=x, y=prev_parent, col sep=comma]{figures/sentiment/belgium_#2_bert_context.csv};
+  \end{axis}
+}
+
+%% User context
+\newcommand{\commenttree}[1]{%
+  \node at (0,0) {%
+    \begin{minipage}[t]{\textwidth}
+      \dirtree{%
+        .1 \color{color1\ifnum#1<5 bw\fi} Ancestor submission or comment.
+          .2 \color{color1\ifnum#1<4 bw\fi} Ancestor comment.
+            .3 \color{color1\ifnum#1<3 bw\fi} Ancestor comment.
+              .4 \color{color1\ifnum#1<2 bw\fi} Ancestor comment.
+                .5 \color{color1\ifnum#1<1 bw\fi} Parent comment.
+                  .6 Reference comment.
+      }
+    \end{minipage}
+  };
+}
+
+\newcommand{\commenttimeline}[1]{%
+  \draw[->] (-4.25,5.5) -- (-4.25,-0.5) node[right] {$t$};
+
+  \node at (0,0){%
+      \begin{minipage}[t]{\textwidth}
+        \dirtree{%
+          .1 \color{color2} Parent comment.
+            .2 Reference comment.
+        }
+      \end{minipage}
+    };
+
+  \foreach \i in {1,2,3,4} {
+    \def\yfactors{{1.25, 2.3, 3.9, 5.1}}
+      \pgfmathsetmacro{\y}{\yfactors[\i-1]}
+      \pgfmathtruncatemacro{\j}{\i + 1}
+      \node at (0,\y){%
+        \begin{minipage}[t]{\textwidth}
+        \dirtree{%
+          .1 \color{color2\ifnum#1<\j bw\fi} Parent comment.
+          .2 \color{\ifnum#1<\j black!60\else black\fi} Comment by same user.
+        }
+        \end{minipage}
+      };
+  }
+}
+
+%% Sentiment distributions
+\pgfplotsset{%
+  model/.style={%
+    width=1.25\textwidth,
+    %
+    axis lines*=left,
+    %
+    xmin=-1.05,
+    xmax=1.05,
+    xlabel={\( s \)},
+    %
+    ymin=0,
+    ymax=1.4,
+    ytick=\empty,
+    yticklabels={},
+    y axis line style={opacity=0},
+    %
+    legend style={%
+      at={(0.95,1.)},
+      anchor=north east,
+      draw=none,
+      font=\scriptsize,
+    },
+  },
+  %
+  modelhist/.style={%
+    ybar,
+    bar width=0.05,
+    fill,
+    fill opacity = 0.75,
+    mark=none,
+    draw=none,
+  },
+  %
+  alphahist/.style={%
+    ybar,
+    bar width=0.137931,
+    mark=none,
+    fill,
+    fill opacity=0.75,
+    draw=none,
+  },
+}
+
+\newcommand{\addmodellegend}{%
+  \addlegendimage{area legend, color1, opacity=0.75, fill=color1, fill opacity=0.75};
+  \addlegendentry{Predicted};
+  \addlegendimage{area legend, color2, opacity=0.75, fill=color2, fill opacity=0.75};
+  \addlegendentry{Observed};
+}
+
+\newcommand{\modelsentiment}[3][]{%
+  \begin{axis}[model, #1]
+    #3
+    \addplot[modelhist, color1, fill] table[x=x, y=y_pred, col sep=comma]{figures/siebc/belgium_#2_histogram.csv};
+    \addplot[modelhist, color2] table[x=x, y=y_obs, col sep=comma]{figures/siebc/belgium_#2_histogram.csv};
+  \end{axis}
+}
+
+\newcommand{\singletopic}[1]{%
+  \addplot+[
+        boxplot,
+        black,
+        line width=2pt,
+        mark=none,
+      ]
+      table[y=#1, col sep=comma] {figures/siebc/belgium_homophily.csv};
+}
+
+\newcommand{\refline}[3]{%
+  \draw[black, dashed, line width=2pt] (axis cs:#1,#3) -- (axis cs:#2,#3);
+}
+
+\newcommand{\homophilyboxplot}[1][]{%
+  \begin{axis}[
+    #1,
+    width=0.45\textwidth,
+    %
+    xtick={1,2,3},
+    xticklabels={Lockdown, Mask, Vaccin},
+    %
+    ymin=0.,
+    ylabel=\( h(\Delta H^s) \),
+    %
+    axis lines*=left,
+    x axis line style={draw=none},
+    x tick style={draw=none},
+    %
+    boxplot/draw direction=y,
+  ]
+    \singletopic{lockdown}
+    \singletopic{mask}
+    \singletopic{vaccin}
+    \refline{.6}{1.4}{0.20490}
+    \refline{1.6}{2.4}{0.22200}
+    \refline{2.6}{3.4}{0.14807}
+  \end{axis}
+}
+
+\newcommand{\alphaslegend}{%
+  \addlegendimage{area legend, color1, opacity=0.75, fill=color1, fill opacity=0.75};
+  \addlegendentry{\( \alpha_u \)};
+  \addlegendimage{area legend, color2, opacity=0.75, fill=color2, fill opacity=0.75};
+  \addlegendentry{\( \alpha_e \)};
+  \addlegendimage{densely dashed, line width=1.5pt}
+  \addlegendentry{mean}
+}
+
+\newcommand{\modelalphas}[5][]{%
+  \begin{axis}[
+    width=1.25\textwidth,
+    % %
+    axis lines*=left,
+    % %
+    xmin=-0.05,
+    xmax=4.05,
+    xlabel={\( \alpha \)},
+    % %
+    ymin=0.0,
+    ymax=0.525,
+    ytick=\empty,
+    yticklabels={},
+    y axis line style={opacity=0},
+    % %
+    legend style={%
+      at={(0.95,1.)},
+      anchor=north east,
+      draw=none,
+      font=\scriptsize,
+    },
+  ]
+    #5
+    \addplot[alphahist, color1] table[x=x, y=a1, col sep=comma]{figures/siebc/#2_alpha_hist.csv};
+    \addplot[alphahist, color2] table[x=x, y=a2, col sep=comma]{figures/siebc/#2_alpha_hist.csv};
+    \addplot[draw=color1, densely dashed, line width=1.5pt] coordinates {(#3,0) (#3,0.475)};
+    \addplot[draw=color2, densely dashed, line width=1.5pt] coordinates {(#4,0) (#4,0.475)};
+  \end{axis}
+}
+

@@ -1,0 +1,148 @@
+% Packages
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{url,float,geometry,tikz,graphicx}
+\usepackage{mathtools}
+\usepackage{amsmath,amsthm,amsfonts,amssymb}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{pgfplots}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{tikz-network}
+\usepackage{mfirstuc}
+\usepackage{environ}
+
+% Control tikz compilation
+\newif\ifhidetikz%
+\hidetikzfalse%
+%% Uncomment for faster compilation
+% \hidetikztrue%
+
+\ifhidetikz\RenewEnviron{tikzpicture}[1][]{%
+	Tikz placeholder
+}\fi
+
+\pgfplotsset{compat=1.18}
+
+% Operators
+\renewcommand{\vec}[1]{\mathbf{#1}}
+
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\newcommand{\diag}[1]{\operatorname{diag} (#1)}
+
+\newcommand{\mean}[1]{\left\langle\ #1 \right\rangle}
+
+% Derivatives
+\renewcommand{\d}{\mathrm{d}}
+\newcommand{\dd}[2]{\frac{\d #1}{\d #2}}
+\newcommand{\ddt}[1]{\dd{#1}{t}}
+
+% Sets
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Rv}[1]{\R^#1}
+\newcommand{\Rm}[2]{\R^{#1\times#2}}
+\newcommand{\Rn}{\Rv{n}}
+\newcommand{\Rnn}{\Rm{n}{n}}
+\newcommand{\Rmn}{\Rm{m}{n}}
+
+\newcommand{\Vs}{\mathcal{V}}
+\newcommand{\Es}{\mathcal{E}}
+
+% Neighbours
+\newcommand{\nb}{k_i}
+\newcommand{\nbs}[1]{{\nb^{#1}}}
+\newcommand{\nbsI}{\nbs{I}}
+\newcommand{\nbsA}{\nbs{A}}
+\newcommand{\Nbh}{\mathcal{N}}
+\newcommand{\Nbhi}{\Nbh_i}
+\newcommand{\Nbhj}{\Nbh_j}
+
+% LuMV parameters
+\newcommand{\Dt}{\tau} % Time step
+\newcommand{\Rinf}{\lambda} % infection rate
+\newcommand{\Rrec}{\mu} % recovery rate
+\newcommand{\Pinf}{\beta} % probability of infection
+\newcommand{\Prec}{\gamma} % probability of recovery
+\newcommand{\thres}{\Theta} %threshold
+\newcommand{\comb}{\alpha} % combination parameter
+\newcommand{\npi}{\eta} % Non-pharmaceutical interventions effect
+\newcommand{\N}{N} % population size
+\newcommand{\Pc}{\Pinf_c}
+\newcommand{\Pstar}{\Pinf^*} % Equivalent transmission
+\newcommand{\grf}{\delta}  % global reduction factor
+
+% LuMV functions
+\newcommand{\Pit}[2]{P_i^{#1\rightarrow~#2}}
+\newcommand{\Ca}{C_\alpha(i)}
+\newcommand{\Cua}{C^U_\alpha(v_i)}
+\newcommand{\Caa}{C^A_\alpha(v_i)}
+\newcommand{\Ea}{E_{\alpha_1\alpha_2} (v_i)}
+\newcommand{\La}{L_{\alpha} (v_i)}
+
+\renewcommand{\t}{(t)}
+\newcommand{\tp}{(t+\tau)}
+\newcommand{\tm}{(t-\tau)}
+
+\newcommand{\pis}[1]{p_i^{#1}}
+\newcommand{\pist}[1]{p_i^{#1}\t{}}
+
+% Abbreviation or not?
+\newcommand{\useabbreviations}{%
+	\newcommand{\Fig}{Fig.}
+	\newcommand{\Figs}{Figs.}
+	\newcommand{\Tab}{Tab.}
+	\newcommand{\Tabs}{Tabs.}
+	\newcommand{\Eq}{Eq.}
+	\newcommand{\Eqs}{Eqs.}
+	\newcommand{\Sec}{Sec.}
+	\newcommand{\Secs}{Secs.}
+
+	\newcommand{\SW}{SW}
+	\newcommand{\SF}{SF}
+	\newcommand{\SWSF}{SW-SF}
+	\newcommand{\SFSW}{SF-SW}
+}
+
+\newcommand{\usefull}{%
+	\newcommand{\Fig}{Figure}
+	\newcommand{\Figs}{Figures}
+	\newcommand{\Tab}{Table}
+	\newcommand{\Tabs}{Tables}
+	\newcommand{\Eq}{Equation}
+	\newcommand{\Eqs}{Equations}
+	\newcommand{\Sec}{Section}
+	\newcommand{\Secs}{Sections}
+
+	\newcommand{\SW}{small-world}
+	\newcommand{\SF}{scale-free}
+	\newcommand{\SWSF}{small-world-scale-free}
+	\newcommand{\SFSW}{scale-free-small-world}
+}
+
+% Julia Tikz preamble
+\usetikzlibrary{arrows.meta}
+\usetikzlibrary{backgrounds}
+\usepgfplotslibrary{patchplots}
+\usepgfplotslibrary{fillbetween}
+\pgfplotsset{%
+	    layers/standard/.define layer set={%
+		        background,axis background,axis grid,axis ticks,axis lines,axis tick labels,pre main,main,axis descriptions,axis foreground%
+		    }{%
+		        grid style={/pgfplots/on layer=axis grid},%
+		        tick style={/pgfplots/on layer=axis ticks},%
+		        axis line style={/pgfplots/on layer=axis lines},%
+		        label style={/pgfplots/on layer=axis descriptions},%
+		        legend style={/pgfplots/on layer=axis descriptions},%
+		        title style={/pgfplots/on layer=axis descriptions},%
+		        colorbar style={/pgfplots/on layer=axis descriptions},%
+		        ticklabel style={/pgfplots/on layer=axis tick labels},%
+		        axis background@ style={/pgfplots/on layer=axis background},%
+		        3d box foreground style={/pgfplots/on layer=axis foreground},%
+		    },
+	}

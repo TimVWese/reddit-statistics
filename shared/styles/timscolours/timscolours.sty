@@ -1,0 +1,31 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{timscolours}[2024/02/27 Color definitions by TVW]
+
+% Load necessary packages
+\RequirePackage{xcolor}
+\RequirePackage{tikz}
+\RequirePackage{pgfplots}
+
+% Include color definitions based on argument
+\newcommand{\LoadColourSettings}[1]{%
+    \input{all_colours.sty}
+    \InputIfFileExists{#1.sty}{}{% If argument.tex exists, load it
+        \PackageError{timscolours}{No settings found for '#1'.}{}%
+    }%
+}
+
+% Default settings
+\DeclareOption{def}{\LoadColourSettings{def}}
+\DeclareOption{default}{\LoadColourSettings{def}}
+\DeclareOption{bw}{\LoadColourSettings{bw}}
+\DeclareOption{blackwhite}{\LoadColourSettings{bw}}
+\DeclareOption{black-white}{\LoadColourSettings{bw}}
+\DeclareOption{julia}{\LoadColourSettings{julia}}
+\DeclareOption{jl}{\LoadColourSettings{julia}}
+\DeclareOption{ugent}{\LoadColourSettings{ugent}}
+\DeclareOption{ug}{\LoadColourSettings{ugent}}
+\DeclareOption{cblind}{\LoadColourSettings{cblind}}
+\DeclareOption{cb}{\LoadColourSettings{cblind}}
+\DeclareOption*{\PackageWarning{timscolours}{Unknown option '\CurrentOption'; defaulting...}\LoadColourSettings{def}}
+%\ExecuteOptions{def}
+\ProcessOptions\relax
