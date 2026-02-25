@@ -5,9 +5,9 @@
 \usetheme[language=en,faculty=bw,usecolors]{ugent}
 \usepackage[ugent]{timscolours}
 \usepackage{svg}
+\usepackage{graphicx} % Required for inserting images
 \usepackage{pgfplots}
 \pgfplotsset{compat=1.18}
-\usepackage{graphicx} % Required for inserting images
 \input{shared/header}
 \input{figures/figures}
 
@@ -48,6 +48,8 @@
   \end{columns}
 }
 
+\newcommand{\tabhead}[1]{\textbf{#1}}
+
 \begin{document}
 
 % Have this if you'd like the presentation to start
@@ -59,92 +61,199 @@
 
 %\section{}
 
-\begin{frame}{Complex contagion}
+\begin{frame}{Introduction}
+	\begin{itemize}
+		\item Opinion dynamics
+		\item Many models
+		\item Watts threshold: adopt if fraction of neighbours exceeds threshold
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Social contagion}
 	\begin{columns}
 		\begin{column}{0.5\textwidth}
 			\begin{itemize}
-				\item Opinion dynamics
-				\item Many models
-				\item Watts threshold: adopt if fraction of neighbours exceeds threshold
+				\item Many social phenomena
+					\begin{itemize}
+						\item Ideas
+						\item Memes
+						\item Adoption of innovation
+						\item ...
+					\end{itemize}
+				\item Diffusion or epidemic-like? (\emph{viral spread})
+				\item<2-> In many ways not!
 			\end{itemize}
 		\end{column}
 		\begin{column}{0.5\textwidth}
 			\centering
-			\includegraphics[width=0.9\textwidth]{figures/pics/watts}
+			\includegraphics<1>[width=0.9\textwidth]{figures/pics/planking}
+			\includegraphics<2>[width=0.9\textwidth]{figures/pics/vintage-planking}
 		\end{column}
+	\end{columns}
+\end{frame}
+
+\begin{frame}{Discrete opinion dynamics}
+	\begin{itemize}
+		\item Like magnets? Ising model!
+		\item $H = -\sum_{i,j} J_{ij} \sigma_i \sigma_j - \mu\sum h_j \sigma_j$ with $\sigma_i \in \{-1, +1\}$
+		\item Allows for microscopic interactions through $J_{ij}$
+	\end{itemize}
+	\begin{columns}
+		\begin{column}{.33\textwidth}\centering\includegraphics[width=0.8\textwidth]{figures/pics/ising-1}\end{column}
+		\begin{column}{.33\textwidth}\centering\includegraphics[width=0.8\textwidth]{figures/pics/ising-2}\end{column}
+		\begin{column}{.33\textwidth}\centering\includegraphics[width=0.8\textwidth]{figures/pics/ising-3}\end{column}
+	\end{columns}
+\end{frame}
+
+\begin{frame}{Discrete opinion dynamics}
+	\begin{itemize}
+		\item Or complex contagion?
+		\item Interactions with the contagion are not independent
+		\item Threshold model: adopt if number of contagious neighbours reach threshold
+	\end{itemize}
+	\centering
+	\includegraphics[width=0.3\textwidth]{figures/pics/watts}
+\end{frame}
+
+\begin{frame}{Continuous opinion space}
+	\begin{columns}
+	\begin{column}{0.5\linewidth}
+		Bounded confidence
+		\begin{itemize}
+			\item Diffusion-like
+			\item Only adjust to opinion that is close enough to yours (< $\epsilon$)
+			\item Fragmentation $\rightarrow$ polarization $\rightarrow$ consensus
+		\end{itemize}
+	\end{column}
+	\begin{column}{0.5\linewidth}
+		\centering
+		\includegraphics[width=0.9\textwidth]{figures/pics/HK.png}
+		(Hegselmann, 2002)
+	\end{column}
 	\end{columns}
 \end{frame}
 
 \begin{frame}{Data-driven approaches}
+	\begin{itemize}
+		\item Only a small fraction of models have been validated with empirical data
+		\item Observationally, complex contagions have been identified, such as the adoptation of a politically motivated profile picture (State, 2015)
+		\item Small-scale randomised experiments confirmed these results (Centola, 2015)
+	\end{itemize}
+	\vfill
+	\centering
+	\includegraphics[width=0.66\textwidth]{figures/pics/equality}
+	\vfill
+\end{frame}
+
+\begin{frame}{Data-driven approaches}
+	\begin{itemize}
+		\item Only a small fraction of models have been validated with empirical data
+		\item Observationally, complex contagions have been identified, such as the adoptation of a politically motivated profile picture (State, 2015)
+		\item Small-scale randomised experiments confirmed these results (Centola, 2015)
+	\end{itemize}
+	\vfill
 	\begin{columns}
-		\begin{column}{0.45\textwidth}
+		\begin{column}{0.33\textwidth}
 			\centering
-			\includegraphics[width=0.15\textheight]{figures/pics/reddit}\\ \vspace{10pt}
-			\includegraphics[width=0.75\textwidth]{figures/pics/reddit_ss}
+			Facebook \\
+			\includegraphics[width=0.4\textwidth]{figures/valensise/fbo}
+			\includegraphics[width=0.4\textwidth]{figures/valensise/fbs}
 		\end{column}
-		\begin{column}{0.1\textwidth}
+		\begin{column}{0.33\textwidth}
 			\centering
-			\vfill
-			\scalebox{2}{%
-				\( {\color{ugentblue}\rightarrow} \)
-			}
-			\vfill
+			Twitter \\
+			\includegraphics[width=0.4\textwidth]{figures/valensise/two}
+			\includegraphics[width=0.4\textwidth]{figures/valensise/tws}
 		\end{column}
-		\begin{column}{0.45\textwidth}
-			% \centering
-			% \hspace*{-40pt}\input{figures/networks/opinion_network}
-			% \begin{itemize}
-			% 	\item \textcolor{ugentyellow}{Structure}
-			% 		\begin{itemize}
-			% 			\item Centrality measures
-			% 			\item Graph balancing
-			% 		\end{itemize}
-			% 	\item \textcolor{ugentblue}{Dynamics}
-			% 	\begin{itemize}
-			% 		\item Time-series analysis
-			% 		\item Causal inference
-			% 		\item Signals via NLP
-			% 	\end{itemize}
-			% \end{itemize}
+		\begin{column}{0.33\textwidth}
+			\centering
+			Reddit \\
+			\includegraphics[width=0.4\textwidth]{figures/valensise/redo}
+			\includegraphics[width=0.4\textwidth]{figures/valensise/reds}
+		\end{column}
+	\end{columns}
+	\vfill
+\end{frame}
+
+\begin{frame}{Reddit}
+	\begin{columns}
+		\begin{column}{0.4\textwidth}
+		\only<1>{\begin{itemize}
+			\item Social network size
+			\item 18th most visited
+			\item Semi-anonymous
+			\item Hierarchical structure
+		\end{itemize}}
+		\end{column}
+		\begin{column}{0.6\textwidth}
+			\only<1>{\includegraphics[width = 0.95\textwidth]{figures/reddit/front}}
 		\end{column}
 	\end{columns}
 \end{frame}
 
-% \begin{frame}{Goals}
-% 	\begin{columns}
-% 		\begin{column}{0.4\textwidth}
-% 			\begin{itemize}
-% 				\item {\only<1>{\color{ugentblue}}Empirical sources for contact reduction}
-% 				\item {\only<2>{\color{ugentblue}}Data-driven models for social dynamics}
-% 				\item {\only<3>{\color{ugentblue}}Identification of conversation polarization}
-% 			\end{itemize}
-% 		\end{column}
-% 		\begin{column}{0.6\textwidth}
-% 			\centering
-% 			\only<1>{\includegraphics[width=.8\textwidth]{figures/reddit/lockdown}}
-% 			\only<2>{\includegraphics[width=.6\textwidth]{figures/reddit/sentiment}}
-% 			\only<3>{\includegraphics[width=.8\textwidth]{figures/reddit/network}}
-% 		\end{column}
-% 	\end{columns}
-% \end{frame}
+\begin{frame}{Goals}
+	\begin{columns}
+		\begin{column}{0.4\textwidth}
+			\begin{itemize}
+				\item {\only<1>{\color{ugentblue}}Empirical sources for contact reduction}
+				\item {\only<2>{\color{ugentblue}}Data-driven models for social dynamics}
+				\item {\only<3>{\color{ugentblue}}Identification of conversation polarization}
+			\end{itemize}
+		\end{column}
+		\begin{column}{0.6\textwidth}
+			\centering
+			\only<1>{\includegraphics[width=.8\textwidth]{figures/reddit/lockdown}}
+			\only<2>{\includegraphics[width=.6\textwidth]{figures/reddit/sentiment}}
+			\only<3>{\includegraphics[width=.8\textwidth]{figures/reddit/network}}
+		\end{column}
+	\end{columns}
+\end{frame}
 
-\begin{frame}[fragile]
-  \vspace{10pt}
-  % \only<1>{\begin{tikzpicture}
-  %   \focusedlockdown
-  %   \unfocusedmask
-  %   \unfocusedvaccin
-  % \end{tikzpicture}}
-  % \only<2>{\begin{tikzpicture}
-  %   \unfocusedlockdown
-  %   \focusedmask
-  %   \unfocusedvaccin
-  % \end{tikzpicture}}
-  % \only<3->{\begin{tikzpicture}
-  %   \unfocusedlockdown
-  %   \unfocusedmask
-  %   \focusedvaccin
-  % \end{tikzpicture}}
+\begin{frame}{The Dataset}
+	\twocolumns{%
+		\begin{itemize}
+			\item r/Belgium community
+			\item 01/2020 - 07/2022
+			\item COVID topics by keyword selection and pretrained BERT model
+			\begin{itemize}
+				\item Lockdown
+				\item Mask
+				\item Vaccination
+			\end{itemize}
+			\item Sentiment by pretrained BERT model
+		\end{itemize}
+	}{%
+		\centering
+		\scalebox{0.75}{
+			\begin{tabular}{rccc}	\hline
+															& \tabhead{Users} & \tabhead{Comments} & \tabhead{Submissions} \\\hline
+				\textbf{Total}        & 28559 & 645280   & 10362 \\
+				Lockdowns     & 9987  & 94494    & 1009 \\
+				Masks         & 6824  & 48500    & 437 \\
+				Vaccination   & 5552  & 41700    & 590 \\
+			\end{tabular}
+		}
+	}
+\end{frame}
+
+
+\begin{frame}
+	\vspace{10pt}
+	% \only<1>{\begin{tikzpicture}
+	%   \focusedlockdown
+	%   \unfocusedmask
+	%   \unfocusedvaccin
+	% \end{tikzpicture}}
+	% \only<2>{\begin{tikzpicture}
+	%   \unfocusedlockdown
+	%   \focusedmask
+	%   \unfocusedvaccin
+	% \end{tikzpicture}}
+	% \only<3->{\begin{tikzpicture}
+	%   \unfocusedlockdown
+	%   \unfocusedmask
+	%   \focusedvaccin
+	% \end{tikzpicture}}
 	% \only<4>{
 	% 	\vspace{-240pt}
 	% 	\begin{center}
@@ -155,12 +264,12 @@
 	% 		\end{tikzpicture}
 	% 	\end{center}
 	% }
-	\focusedlockdown
-	\focusedmask
-	\focusedvaccin
+	%\focusedlockdown
+	%\focusedmask
+	%\focusedvaccin
 \end{frame}
 
-\begin{frame}[fragile]{Sentiment interactions: vaccination}
+\begin{frame}{Sentiment interactions: vaccination}
   \twocolumns{%
     \begin{tikzpicture}
       \sentheatmap{vaccin}
@@ -184,7 +293,7 @@
   }
 \end{frame}
 
-\begin{frame}[fragile]{SIEBC Model}
+\begin{frame}{SIEBC Model}
 	\twocolumns[.3]{%
 		\begin{itemize}
 			\item \textbf{S}mooth
@@ -212,7 +321,7 @@
 	\end{column}
 }
 
-\begin{frame}[fragile]{Reconstruction of sentiment distributions}
+\begin{frame}{Reconstruction of sentiment distributions}
 	\begin{columns}
 		\topiccol{\modelsentiment{lockdown}{}}{Lockdowns}
 		\topiccol{\modelsentiment{mask}{}}{Masks}
@@ -224,7 +333,7 @@
 	\end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Expressed sentiment update is strongest}
+\begin{frame}{Expressed sentiment update is strongest}
 	\begin{columns}
 		\topiccol{\modelalphas[]{lockdown}{0.41037}{0.88267}{}}{Lockdowns}
 		\topiccol{\modelalphas[]{mask}{0.41230}{0.66326}{}}{Masks}

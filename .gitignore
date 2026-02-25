@@ -21,6 +21,7 @@ figures/externalize
 *.lit
 *.ri
 *.dep
+.vrb
 
 ## Intermediate documents:
 *.dvi
