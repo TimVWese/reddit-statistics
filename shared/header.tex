@@ -9,6 +9,7 @@
 \usepackage{graphicx}
 \usepackage{caption}
 \usepackage{subcaption}
+\usepackage{pgfplots}
 \usepackage{xcolor}
 \usepackage{booktabs}
 \usepackage{hyperref}
@@ -25,6 +26,8 @@
 \ifhidetikz\RenewEnviron{tikzpicture}[1][]{%
 	Tikz placeholder
 }\fi
+
+\pgfplotsset{compat=1.18}
 
 % Operators
 \renewcommand{\vec}[1]{\mathbf{#1}}
@@ -73,12 +76,13 @@
 \newcommand{\Pc}{\Pinf_c}
 \newcommand{\Pstar}{\Pinf^*} % Equivalent transmission
 \newcommand{\grf}{\delta}  % global reduction factor
+\newcommand{\trust}{\omega} % proportion of vertices connected to aware static vertex
 
 % LuMV functions
 \newcommand{\Pit}[2]{P_i^{#1\rightarrow~#2}}
 \newcommand{\Ca}{C_\alpha(i)}
-\newcommand{\Cua}{C^U_\alpha(v_i)}
-\newcommand{\Caa}{C^A_\alpha(v_i)}
+\newcommand{\Cua}{C^U_\alpha(i)}
+\newcommand{\Caa}{C^A_\alpha(i)}
 \newcommand{\Ea}{E_{\alpha_1\alpha_2} (v_i)}
 \newcommand{\La}{L_{\alpha} (v_i)}
 

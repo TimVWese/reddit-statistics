@@ -59,15 +59,6 @@
 % I guess you always want a titleframe
 \titleframe
 
-%\section{}
-
-\begin{frame}{Introduction}
-	\begin{itemize}
-		\item Opinion dynamics
-		\item Many models
-		\item Watts threshold: adopt if fraction of neighbours exceeds threshold
-	\end{itemize}
-\end{frame}
 
 \begin{frame}{Social contagion}
 	\begin{columns}
@@ -175,6 +166,19 @@
 	\vfill
 \end{frame}
 
+\begin{frame}{Importance for disease prediction}
+	\twocolumns[.6]{%
+		\begin{itemize}
+			\item Epidemics influence behaviour
+			\item Human behaviour influences human behaviour
+			\item Human behaviour influences epidemics
+		\end{itemize}
+	}{%
+		\centering
+		\includegraphics[width=.9\textwidth]{figures/pics/wcpapier.png}
+	}
+\end{frame}
+
 \begin{frame}{Reddit}
 	\begin{columns}
 		\begin{column}{0.4\textwidth}
@@ -237,36 +241,72 @@
 \end{frame}
 
 
-\begin{frame}
-	\vspace{10pt}
-	% \only<1>{\begin{tikzpicture}
-	%   \focusedlockdown
-	%   \unfocusedmask
-	%   \unfocusedvaccin
-	% \end{tikzpicture}}
-	% \only<2>{\begin{tikzpicture}
-	%   \unfocusedlockdown
-	%   \focusedmask
-	%   \unfocusedvaccin
-	% \end{tikzpicture}}
-	% \only<3->{\begin{tikzpicture}
-	%   \unfocusedlockdown
-	%   \unfocusedmask
-	%   \focusedvaccin
-	% \end{tikzpicture}}
-	% \only<4>{
-	% 	\vspace{-240pt}
-	% 	\begin{center}
-	% 		\begin{tikzpicture}
-	% 			\node[] {%
-	% 				\includegraphics[width=.8\textwidth]{figures/pics/vaccine}
-	% 			};
-	% 		\end{tikzpicture}
-	% 	\end{center}
-	% }
-	%\focusedlockdown
-	%\focusedmask
-	%\focusedvaccin
+% \begin{frame}
+% 	\vspace{10pt}
+% 	\only<1>{\begin{tikzpicture}
+% 	  \focusedlockdown
+% 	  \unfocusedmask
+% 	  \unfocusedvaccin
+% 	\end{tikzpicture}}
+% 	\only<2>{\begin{tikzpicture}
+% 	  \unfocusedlockdown
+% 	  \focusedmask
+% 	  \unfocusedvaccin
+% 	\end{tikzpicture}}
+% 	\only<3->{\begin{tikzpicture}
+% 	  \unfocusedlockdown
+% 	  \unfocusedmask
+% 	  \focusedvaccin
+% 	\end{tikzpicture}}
+% 	\only<4>{
+% 		\vspace{-240pt}
+% 		\begin{center}
+% 			\begin{tikzpicture}
+% 				\node[] {%
+% 					\includegraphics[width=.8\textwidth]{figures/pics/vaccine}
+% 				};
+% 			\end{tikzpicture}
+% 		\end{center}
+% 	}
+% 	\focusedlockdown
+% 	\focusedmask
+% 	\focusedvaccin
+% \end{frame}
+
+\begin{frame}{Topic contagion}
+	\twocolumns[.5]{%
+		\begin{itemize}
+			\item Can participating in a discussion \alert{cause} a user to initiate one?
+			\item Post is \alert{initiating} if no ancestor shares the same topic
+			\item Else, participating
+		\end{itemize}
+	}{%
+		\begin{tikzpicture}
+			\contagionexample
+		\end{tikzpicture}
+	}
+\end{frame}
+
+\begin{frame}{No evidence of topic contagion}
+	\twocolumns[.5]{%
+		\begin{tikzpicture}
+			\activitycdf[ecdfylabels]{lockdown}{\addactivitylegend}
+		\end{tikzpicture}
+		\begin{itemize}
+			\item Lockdowns
+		\end{itemize}
+	}{%
+		\begin{tikzpicture}
+			\activitycdf[]{vaccin}{}
+		\end{tikzpicture}
+		\begin{itemize}
+			\item Vaccination
+		\end{itemize}
+	}
+	\begin{itemize}
+		\item \alert{Observed $\rho(i)$ lies above null} at small $i$: initiations occur \emph{earlier} than expected
+		\item Participating does not lead to initiating
+	\end{itemize}
 \end{frame}
 
 \begin{frame}{Sentiment interactions: vaccination}
@@ -342,6 +382,39 @@
 	\begin{itemize}
 		\item Expressed sentiment might diverge from actual sentiment
 	\end{itemize}
+\end{frame}
+
+\begin{frame}{Strengths of SIEBC}
+	\begin{itemize}
+		\item Bounded confidence kernel is required to explain homophily (cfr. \( L_\alpha \) )
+		\item Hidden state can deal with nois (cfr. $\bar{e}$)
+	\end{itemize}
+	\centering
+	\vfill
+	\begin{tabular}{lccccccccc}\hline
+		& \multicolumn{2}{c}{\emph{Lockdowns}} & \multicolumn{2}{c}{\emph{Masks}} & \multicolumn{2}{c}{\emph{Vaccination}} \\
+		\textbf{Model} & \( KS \) & \( \Delta h \) & \( KS \) & \( \Delta h \) & \( KS \) & \( \Delta h \) \\ \hline
+		\( L_\alpha \) & 0.044 & -0.097 \( \pm 0.009 \) & 0.048 & -0.131 \( \pm 0.017 \) & 0.068 & -0.103 \( \pm 0.018 \) \\
+		\( \bar{e} \) & 0.049 & -0.070 \( \pm 0.023 \) & 0.052 & -0.075 \( \pm 0.033 \) & 0.076 & -0.056 \( \pm 0.047 \) \\
+		SIEBC  & \textbf{0.043} & \textbf{-0.027} \( \pm 0.013 \) & \textbf{0.043} & \textbf{-0.067} \( \pm 0.020 \) & \textbf{0.055} & \textbf{-0.033} \( \pm 0.021 \) \\\hline
+	\end{tabular}
+	\vfill
+\end{frame}
+
+\begin{frame}{Conclusions}
+	\twocolumns{%
+		\only<1->{\begin{itemize}
+			\item Simple model explains complex data
+			\item Sentiment is not a very meaningful signal
+			\item Reddit is not a representative sample
+		\end{itemize}}
+	}{%
+		\only<2>{\begin{itemize}
+			\item Topics discussed depends on external factors
+			\item BC model can explain homphily
+			\item (Subtle) differences exist between topics
+		\end{itemize}}
+	}
 \end{frame}
 
 \end{document}
